@@ -16,7 +16,24 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
+        
+        window = UIWindow(frame: UIScreen.main.bounds)
+        window?.makeKeyAndVisible()
+        
+        let layout = UICollectionViewFlowLayout()
+        window?.rootViewController = UINavigationController(rootViewController: HomeController(collectionViewLayout: layout))
+        
+        UINavigationBar.appearance().barTintColor = UIColor(colorLiteralRed: 230/255, green: 33/255, blue: 23/255, alpha: 1)
+        
+        application.statusBarStyle = .lightContent
+        
+//        let statusBackgroundView = UIView()
+//        statusBackgroundView.backgroundColor = UIColor(colorLiteralRed: 194/255, green: 33/255, blue: 23/255, alpha: 1)
+//        
+//        window?.addSubview(statusBackgroundView)
+//        window?.addConstraintWithFormat(format: "H:|[v0]|", views: statusBackgroundView)
+//        window?.addConstraintWithFormat(format: "V:|[v0(20)]", views: statusBackgroundView)
+        
         return true
     }
 
