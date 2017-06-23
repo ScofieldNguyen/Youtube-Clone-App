@@ -1,0 +1,30 @@
+{
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "9BA75DE6C72A488484CF7E6FF9319823202D2DD4",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
+
+  },
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
+    "9BA75DE6C72A488484CF7E6FF9319823202D2DD4" : 9223372036854775807,
+    "2A6DE1D116F89406AFEED82289C2E0D95896816E" : 9223372036854775807
+  },
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "0F444E07-1AD2-4CE1-9F76-098DD2BF7FFE",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "9BA75DE6C72A488484CF7E6FF9319823202D2DD4" : "Youtube-app\/",
+    "2A6DE1D116F89406AFEED82289C2E0D95896816E" : "Code-Note\/"
+  },
+  "DVTSourceControlWorkspaceBlueprintNameKey" : "Youtube-app",
+  "DVTSourceControlWorkspaceBlueprintVersion" : 204,
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "Youtube-app.xcodeproj",
+  "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/ScofieldNguyen\/Code-Note.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "2A6DE1D116F89406AFEED82289C2E0D95896816E"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/ScofieldNguyen\/Youtube-Clone-App.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "9BA75DE6C72A488484CF7E6FF9319823202D2DD4"
+    }
+  ]
+}

@@ -9,6 +9,26 @@
 import UIKit
 
 class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLayout {
+    
+    let videos: [Video] = {
+        let chanel = Chanel()
+        chanel.chanelName = "Đời Sống Sinh Viên"
+        chanel.chanelImageName = "doisongsinhvienChanel"
+        
+        let video1 = Video()
+        video1.videoTitle = "Cá nướng giấy bạc"
+        video1.chanel = chanel
+        video1.videoSubtitle = "\((video1.chanel?.chanelName)!) · 65K views · 1 year ago"
+        video1.videoImageName = "thumbnailVideoImage"
+        
+        let video2 = Video()
+        video2.videoTitle = "Chả giò ngày mưa - Cách sinh viên nấu ăn"
+        video2.chanel = chanel
+        video2.videoSubtitle = "\((video2.chanel?.chanelName)!) · 65K views · 1 year ago"
+        video2.videoImageName = "thumbnailVideoImage2"
+        
+        return [video1, video2]
+    }()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -30,6 +50,7 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
         navigationController?.navigationBar.isTranslucent = false
         
         setupMenuBar()
+        setupNavbaButtonItems()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -51,12 +72,31 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
         view.addConstraintWithFormat(format: "V:|[v0(50)]", views: menuBar)
     }
     
+    func setupNavbaButtonItems() {
+        let searchButtonImage = UIImage(named: "search")?.withRenderingMode(.alwaysOriginal)
+        let searchButtonItem = UIBarButtonItem(image: searchButtonImage, style: .plain, target: self, action: #selector(handleSearchButton))
+        
+        let moreButtonImage = UIImage(named: "more")?.withRenderingMode(.alwaysOriginal)
+        let moreButtonItem = UIBarButtonItem(image: moreButtonImage, style: .plain, target: self, action: #selector(handleMoreButton))
+        
+        navigationItem.rightBarButtonItems = [moreButtonItem, searchButtonItem]
+    }
+    
+    func handleSearchButton() {
+        print("search button pressed")
+    }
+    
+    func handleMoreButton() {
+        print("More button pressed")
+    }
+    
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 5
+        return videos.count
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CellId", for: indexPath)
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CellId", for: indexPath) as! VideoCell
+        cell.video = videos[indexPath.row]
         return cell
     }
     
