@@ -10,28 +10,74 @@ import UIKit
 
 class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLayout {
     
-    let videos: [Video] = {
-        let chanel = Chanel()
-        chanel.chanelName = "Đời Sống Sinh Viên"
-        chanel.chanelImageName = "doisongsinhvienChanel"
+//    let videos: [Video] = {
+//        let chanel = Chanel()
+//        chanel.chanelName = "Đời Sống Sinh Viên"
+//        chanel.chanelImageName = "doisongsinhvienChanel"
+//        
+//        let video1 = Video()
+//        video1.videoTitle = "Cá nướng giấy bạc"
+//        video1.chanel = chanel
+//        video1.videoSubtitle = "\((video1.chanel?.chanelName)!) · 65K views · 1 year ago"
+//        video1.videoImageName = "thumbnailVideoImage"
+//        
+//        let video2 = Video()
+//        video2.videoTitle = "Chả giò ngày mưa - Cách sinh viên nấu ăn"
+//        video2.chanel = chanel
+//        video2.videoSubtitle = "\((video2.chanel?.chanelName)!) · 65K views · 1 year ago"
+//        video2.videoImageName = "thumbnailVideoImage2"
+//        
+//        return [video1, video2]
+//    }()
+    
+    var videos: [Video]?
+    
+    func fetchVideo() {
         
-        let video1 = Video()
-        video1.videoTitle = "Cá nướng giấy bạc"
-        video1.chanel = chanel
-        video1.videoSubtitle = "\((video1.chanel?.chanelName)!) · 65K views · 1 year ago"
-        video1.videoImageName = "thumbnailVideoImage"
+        let url = URL(string: "https://s3-us-west-2.amazonaws.com/youtubeassets/home.json")
         
-        let video2 = Video()
-        video2.videoTitle = "Chả giò ngày mưa - Cách sinh viên nấu ăn"
-        video2.chanel = chanel
-        video2.videoSubtitle = "\((video2.chanel?.chanelName)!) · 65K views · 1 year ago"
-        video2.videoImageName = "thumbnailVideoImage2"
+        URLSession.shared.dataTask(with: url!) { (data, response, error) in
+            
+            if error != nil {
+                print(error)
+                return
+            }
+            
+            do {
+                let json = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers)
+                
+                self.videos = [Video]()
+                
+                for dictionary in json as! [[String: AnyObject]] {
+                    let video = Video()
+                    video.videoTitle = dictionary["title"] as? String
+                    video.numberOfViews = dictionary["number_of_views"] as? Int
+                    print(dictionary["number_of_views"])
+                    video.videoImageName = dictionary["thumbnail_image_name"] as? String
+                    
+                    let chanel = Chanel()
+                    let chanelDict = dictionary["channel"] as! [String:String]
+                    chanel.chanelName = chanelDict["name"]
+                    chanel.chanelImageName = chanelDict["profile_image_name"]
+                    video.chanel = chanel
+                    
+                    video.duration = dictionary["duration"] as? Int
+                    
+                    self.videos?.append(video)
+                }
+                
+                self.collectionView?.reloadData()
+            } catch let jsonError {
+                print(jsonError)
+            }
+        }.resume()
         
-        return [video1, video2]
-    }()
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        fetchVideo()
         
         collectionView?.backgroundColor = UIColor.white
         collectionView?.register(VideoCell.self, forCellWithReuseIdentifier: "CellId")
@@ -91,18 +137,18 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
     }
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return videos.count
+        return videos?.count ?? 0
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CellId", for: indexPath) as! VideoCell
-        cell.video = videos[indexPath.row]
+        cell.video = videos?[indexPath.row]
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let height = (view.frame.width - 32) * 9 / 16
-        return CGSize(width: view.frame.width, height: height + 94)
+        return CGSize(width: view.frame.width, height: height + 110)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {

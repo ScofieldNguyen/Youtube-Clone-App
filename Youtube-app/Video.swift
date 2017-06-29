@@ -12,7 +12,8 @@ class Video: NSObject {
     
     var videoTitle: String?
     var videoImageName: String?
-    var videoSubtitle: String?
+    var numberOfViews: Int?
+    var duration: Int?
     
     var chanel: Chanel?
 }
