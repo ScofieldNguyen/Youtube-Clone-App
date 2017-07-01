@@ -10,26 +10,6 @@ import UIKit
 
 class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLayout {
     
-//    let videos: [Video] = {
-//        let chanel = Chanel()
-//        chanel.chanelName = "Đời Sống Sinh Viên"
-//        chanel.chanelImageName = "doisongsinhvienChanel"
-//        
-//        let video1 = Video()
-//        video1.videoTitle = "Cá nướng giấy bạc"
-//        video1.chanel = chanel
-//        video1.videoSubtitle = "\((video1.chanel?.chanelName)!) · 65K views · 1 year ago"
-//        video1.videoImageName = "thumbnailVideoImage"
-//        
-//        let video2 = Video()
-//        video2.videoTitle = "Chả giò ngày mưa - Cách sinh viên nấu ăn"
-//        video2.chanel = chanel
-//        video2.videoSubtitle = "\((video2.chanel?.chanelName)!) · 65K views · 1 year ago"
-//        video2.videoImageName = "thumbnailVideoImage2"
-//        
-//        return [video1, video2]
-//    }()
-    
     var videos: [Video]?
     
     func fetchVideo() {
