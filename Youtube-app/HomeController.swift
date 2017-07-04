@@ -32,7 +32,6 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
                     let video = Video()
                     video.videoTitle = dictionary["title"] as? String
                     video.numberOfViews = dictionary["number_of_views"] as? Int
-                    print(dictionary["number_of_views"])
                     video.videoImageName = dictionary["thumbnail_image_name"] as? String
                     
                     let chanel = Chanel()
@@ -91,6 +90,8 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
         return mb
     }()
     
+    lazy var setupLauncher = SetupLauncher()
+    
     private func setupMenuBar() {
         view.addSubview(menuBar)
         
@@ -113,7 +114,7 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
     }
     
     func handleMoreButton() {
-        print("More button pressed")
+        setupLauncher.show()
     }
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
