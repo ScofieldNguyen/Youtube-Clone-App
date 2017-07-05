@@ -8,6 +8,26 @@
 
 import UIKit
 
+class SettingController: UIViewController {
+    
+    var settingTitle: String?
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: UIColor.white]
+        navigationController?.navigationBar.tintColor = UIColor.white
+        
+        
+        view.backgroundColor = UIColor.white
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationItem.title = settingTitle
+    }
+    
+}
+
 class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLayout {
     
     var videos: [Video]?
@@ -90,7 +110,13 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
         return mb
     }()
     
-    lazy var setupLauncher = SetupLauncher()
+    lazy var setupLauncher: SetupLauncher = {
+        let sl = SetupLauncher()
+        sl.homeController = self
+        return sl
+    }()
+    
+    let settingViewController = SettingController()
     
     private func setupMenuBar() {
         view.addSubview(menuBar)
@@ -115,6 +141,11 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
     
     func handleMoreButton() {
         setupLauncher.show()
+    }
+    
+    func showSettingController(setting: Setting) {
+        settingViewController.settingTitle = setting.name
+        navigationController?.pushViewController(settingViewController, animated: true)
     }
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {

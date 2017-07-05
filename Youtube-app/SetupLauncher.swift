@@ -17,6 +17,9 @@ class SetupLauncher: NSObject, UICollectionViewDelegate, UICollectionViewDataSou
         collectionView.register(SettingCell.self, forCellWithReuseIdentifier: cellID)
     }
     
+    var homeController: HomeController?
+    var selectedSetting: Setting?
+    
     let settings: [Setting] = {
         return [Setting(name: "Settings", imageName: "setting"), Setting(name: "Term & pricacy policy", imageName: "privacy"), Setting(name: "Send Feedback", imageName: "feedback"), Setting(name: "Help", imageName: "help"), Setting(name: "Switch Account", imageName: "account"), Setting(name: "Cancel", imageName: "cancel")]
     }()
@@ -54,6 +57,14 @@ class SetupLauncher: NSObject, UICollectionViewDelegate, UICollectionViewDataSou
         return cell
     }
     
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        selectedSetting = settings[indexPath.row]
+//        if selectedSetting?.name == "Cancel" {
+//            selectedSetting?.name = ""
+//        }
+        handleDismiss()
+    }
+    
     private func setup() {
         if let window = UIApplication.shared.keyWindow {
             window.addSubview(blackView)
@@ -73,7 +84,12 @@ class SetupLauncher: NSObject, UICollectionViewDelegate, UICollectionViewDataSou
         UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
             self.blackView.alpha = 0
             self.collectionView.frame = CGRect(x: 0, y: self.yCollectionView! + self.heightCollectionView, width: self.collectionView.frame.width, height: self.collectionView.frame.height)
-        }, completion: nil)
+        }, completion: { (complete: Bool) in
+            if  self.selectedSetting?.name != "" && self.selectedSetting?.name != "Cancel" {
+                self.homeController?.showSettingController(setting: self.selectedSetting!)
+                self.selectedSetting = Setting(name: "", imageName: "")
+            }
+        })
     }
     
     func show() {
