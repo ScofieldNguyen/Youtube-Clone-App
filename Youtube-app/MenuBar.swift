@@ -27,11 +27,35 @@ class MenuBar: UIView, UICollectionViewDataSource, UICollectionViewDelegate, UIC
         super.init(frame: frame)
         
         collectionView.register(MenuCell.self, forCellWithReuseIdentifier: cellId)
-        
+        setupCollectionView()
+        setupHorizontalView()
+    }
+    
+    func setupCollectionView() {
         addSubview(collectionView)
         addConstraintWithFormat(format: "H:|[v0]|", views: collectionView)
         addConstraintWithFormat(format: "V:|[v0]|", views: collectionView)
     }
+    
+    func setupHorizontalView() {
+        addSubview(horizontalView)
+        
+        leftAnchorHorizontalView = horizontalView.leftAnchor.constraint(equalTo: self.leftAnchor)
+        leftAnchorHorizontalView?.isActive = true
+        
+        horizontalView.bottomAnchor.constraint(equalTo: self.bottomAnchor).isActive = true
+        horizontalView.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 1/4).isActive = true
+        horizontalView.heightAnchor.constraint(equalToConstant: 8).isActive = true
+    }
+    
+    var horizontalView: UIView = {
+        let hv = UIView()
+        hv.backgroundColor = UIColor(white: 0.95, alpha: 1)
+        hv.translatesAutoresizingMaskIntoConstraints = false
+        return hv
+    }()
+    
+    var leftAnchorHorizontalView: NSLayoutConstraint?
     
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -51,6 +75,15 @@ class MenuBar: UIView, UICollectionViewDataSource, UICollectionViewDelegate, UIC
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
         return 0
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let x = CGFloat(indexPath.row) * self.frame.width / 4
+        leftAnchorHorizontalView?.constant = x
+        UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: { 
+            self.layoutIfNeeded()
+        }, completion: nil)
+//        print(index Path.row)
     }
     
     required init?(coder aDecoder: NSCoder) {

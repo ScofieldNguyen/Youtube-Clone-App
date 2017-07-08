@@ -9,10 +9,10 @@
 import UIKit
 
 class Setting: NSObject {
-    var name: String?
+    var name: SettingName?
     var imageName: String?
     
-    init(name: String, imageName: String) {
+    init(name: SettingName, imageName: String) {
         self.name = name
         self.imageName = imageName
     }
@@ -23,7 +23,7 @@ class SettingCell: BaseClass {
     var setting: Setting? {
         didSet{
             if let name = setting?.name, let imageName = setting?.imageName {
-                settingLabel.text = name
+                settingLabel.text = name.rawValue
                 settingIcon.image = UIImage(named: imageName)?.withRenderingMode(.alwaysTemplate)
             }
         }

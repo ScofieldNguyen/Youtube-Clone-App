@@ -8,6 +8,15 @@
 
 import UIKit
 
+enum SettingName: String {
+    case settings = "Settings"
+    case privacy = "Term & pricacy policy"
+    case feedback = "Send Feedback"
+    case help = "Help"
+    case account = "Switch Account"
+    case cancel = "Cancel"
+}
+
 class SetupLauncher: NSObject, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     override init() {
         super.init()
@@ -21,7 +30,7 @@ class SetupLauncher: NSObject, UICollectionViewDelegate, UICollectionViewDataSou
     var selectedSetting: Setting?
     
     let settings: [Setting] = {
-        return [Setting(name: "Settings", imageName: "setting"), Setting(name: "Term & pricacy policy", imageName: "privacy"), Setting(name: "Send Feedback", imageName: "feedback"), Setting(name: "Help", imageName: "help"), Setting(name: "Switch Account", imageName: "account"), Setting(name: "Cancel", imageName: "cancel")]
+        return [Setting(name: .settings, imageName: "setting"), Setting(name: .privacy, imageName: "privacy"), Setting(name: .feedback, imageName: "feedback"), Setting(name: .help, imageName: "help"), Setting(name: .account, imageName: "account"), Setting(name: .cancel, imageName: "cancel")]
     }()
     
     var yCollectionView: CGFloat?
@@ -85,9 +94,9 @@ class SetupLauncher: NSObject, UICollectionViewDelegate, UICollectionViewDataSou
             self.blackView.alpha = 0
             self.collectionView.frame = CGRect(x: 0, y: self.yCollectionView! + self.heightCollectionView, width: self.collectionView.frame.width, height: self.collectionView.frame.height)
         }, completion: { (complete: Bool) in
-            if  self.selectedSetting?.name != "" && self.selectedSetting?.name != "Cancel" {
+            if  self.selectedSetting != nil && self.selectedSetting?.name != .cancel {
                 self.homeController?.showSettingController(setting: self.selectedSetting!)
-                self.selectedSetting = Setting(name: "", imageName: "")
+                self.selectedSetting = nil
             }
         })
     }

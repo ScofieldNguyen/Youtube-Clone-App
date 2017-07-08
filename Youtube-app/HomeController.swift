@@ -33,44 +33,10 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
     var videos: [Video]?
     
     func fetchVideo() {
-        
-        let url = URL(string: "https://s3-us-west-2.amazonaws.com/youtubeassets/home.json")
-        
-        URLSession.shared.dataTask(with: url!) { (data, response, error) in
-            
-            if error != nil {
-                print(error)
-                return
-            }
-            
-            do {
-                let json = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers)
-                
-                self.videos = [Video]()
-                
-                for dictionary in json as! [[String: AnyObject]] {
-                    let video = Video()
-                    video.videoTitle = dictionary["title"] as? String
-                    video.numberOfViews = dictionary["number_of_views"] as? Int
-                    video.videoImageName = dictionary["thumbnail_image_name"] as? String
-                    
-                    let chanel = Chanel()
-                    let chanelDict = dictionary["channel"] as! [String:String]
-                    chanel.chanelName = chanelDict["name"]
-                    chanel.chanelImageName = chanelDict["profile_image_name"]
-                    video.chanel = chanel
-                    
-                    video.duration = dictionary["duration"] as? Int
-                    
-                    self.videos?.append(video)
-                }
-                
-                self.collectionView?.reloadData()
-            } catch let jsonError {
-                print(jsonError)
-            }
-        }.resume()
-        
+        ApiService.sharedInstance.fetchVideos { (videos) in
+            self.videos = videos
+            self.collectionView?.reloadData()
+        }
     }
 
     override func viewDidLoad() {
@@ -94,15 +60,22 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
         
         navigationController?.navigationBar.isTranslucent = false
         
+        navigationController?.hidesBarsOnSwipe = true
+        
         setupMenuBar()
         setupNavbaButtonItems()
     }
     
+    var notExecuted: Bool = true
+    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
-        let selectedIndexpath = IndexPath(item: 0, section: 0)
-        menuBar.collectionView.selectItem(at: selectedIndexpath, animated: false, scrollPosition: [])
+        if notExecuted {
+            let selectedIndexpath = IndexPath(item: 0, section: 0)
+            menuBar.collectionView.selectItem(at: selectedIndexpath, animated: false, scrollPosition: [])
+            notExecuted = false
+        }
     }
     
     let menuBar: MenuBar = {
@@ -119,10 +92,18 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
     let settingViewController = SettingController()
     
     private func setupMenuBar() {
+        let redView = UIView()
+        redView.backgroundColor = UIColor.rgb(red: 230, green: 33, blue: 23)
+        
+        view.addSubview(redView)
         view.addSubview(menuBar)
         
         view.addConstraintWithFormat(format: "H:|[v0]|", views: menuBar)
-        view.addConstraintWithFormat(format: "V:|[v0(50)]", views: menuBar)
+        view.addConstraintWithFormat(format: "V:[v0(50)]", views: menuBar)
+        view.addConstraintWithFormat(format: "H:|[v0]|", views: redView)
+        view.addConstraintWithFormat(format: "V:[v0(50)]", views: redView)
+        
+        menuBar.topAnchor.constraint(equalTo: topLayoutGuide.bottomAnchor).isActive = true
     }
     
     func setupNavbaButtonItems() {
@@ -144,7 +125,7 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
     }
     
     func showSettingController(setting: Setting) {
-        settingViewController.settingTitle = setting.name
+        settingViewController.settingTitle = setting.name?.rawValue
         navigationController?.pushViewController(settingViewController, animated: true)
     }
     
