@@ -45,11 +45,19 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
         fetchVideo()
         
         collectionView?.backgroundColor = UIColor.white
-        collectionView?.register(VideoCell.self, forCellWithReuseIdentifier: "CellId")
+//        collectionView?.register(VideoCell.self, forCellWithReuseIdentifier: "CellId")
+        collectionView?.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "CellID")
         // Fix collectionView under menuBar
         collectionView?.contentInset = UIEdgeInsetsMake(50, 0, 0, 0)
         collectionView?.scrollIndicatorInsets = UIEdgeInsetsMake(50, 0, 0, 0)
         
+        // Set scroll direction to horizontal
+        if let flowLayout = collectionView?.collectionViewLayout as? UICollectionViewFlowLayout {
+            flowLayout.scrollDirection = .horizontal
+        }
+        
+        // Paging flowlayout
+        collectionView?.isPagingEnabled = true
         
         let titleLabel = UILabel()
         titleLabel.text = "Home"
@@ -78,8 +86,9 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
         }
     }
     
-    let menuBar: MenuBar = {
+    lazy var menuBar: MenuBar = {
         let mb = MenuBar()
+        mb.homeController = self
         return mb
     }()
     
@@ -117,7 +126,13 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
     }
     
     func handleSearchButton() {
-        print("search button pressed")
+//        print("search button pressed")
+        
+    }
+    
+    func scrollToDirection(index i: Int) {
+        let indexPath = IndexPath(item: i, section: 0)
+        collectionView?.scrollToItem(at: indexPath, at: [], animated: true)
     }
     
     func handleMoreButton() {
@@ -130,23 +145,55 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
     }
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return videos?.count ?? 0
+        return 4
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CellId", for: indexPath) as! VideoCell
-        cell.video = videos?[indexPath.row]
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CellID", for: indexPath)
+        let colors: [UIColor] = [.blue, .red, .green, .gray]
+        cell.backgroundColor = colors[indexPath.row]
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let height = (view.frame.width - 32) * 9 / 16
-        return CGSize(width: view.frame.width, height: height + 110)
+        return CGSize(width: view.frame.width, height: view.frame.height)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         return 0
     }
+    
+    override func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        let x = scrollView.contentOffset.x
+        menuBar.leftAnchorHorizontalView?.constant = x / 4
+    }
+    
+    override func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
+        let index = targetContentOffset.pointee.x / view.frame.width
+        let indexPath = IndexPath(item: Int(index), section: 0)
+        menuBar.collectionView.selectItem(at: indexPath, animated: true, scrollPosition: [])
+    }
+    
+    
+    
+//    override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+//        return videos?.count ?? 0
+//    }
+//    
+//    override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+//        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CellId", for: indexPath) as! VideoCell
+//        cell.video = videos?[indexPath.row]
+//        return cell
+//    }
+//    
+//    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+//        let height = (view.frame.width - 32) * 9 / 16
+//        return CGSize(width: view.frame.width, height: height + 110)
+//    }
+//    
+//    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+//        return 0
+//    }
     
 //    override init(collectionViewLayout layout: UICollectionViewLayout) {
 //        
