@@ -87,6 +87,7 @@ class MenuBar: UIView, UICollectionViewDataSource, UICollectionViewDelegate, UIC
 //        }, completion: nil)
 //        print(index Path.row)
         homeController?.scrollToDirection(index: indexPath.row)
+        homeController?.changeTitle(atIndex: indexPath.row)
     }
     
     required init?(coder aDecoder: NSCoder) {

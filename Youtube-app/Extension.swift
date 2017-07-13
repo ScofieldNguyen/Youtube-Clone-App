@@ -56,6 +56,7 @@ class CustomImageView: UIImageView {
             }
             
             if urlString == self.imageURLString {
+                print(urlString)
                 DispatchQueue.main.async {
                     let loadedImage = UIImage(data: data!)
                     imageCache.setObject(loadedImage!, forKey: NSString(string: urlString))
