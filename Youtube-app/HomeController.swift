@@ -33,14 +33,18 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
     
     let titleString = ["Home", "Trending", "Subscription", "User"]
     var notExecuted: Bool = true
-    let cellID = "CellID"
+    let homeFeedCellID = "HomeID"
+    let trendingFeedCellID = "TrendingID"
+    let subscriptionsFeedCellID = "SubcriptionsID"
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
         collectionView?.backgroundColor = UIColor.white
-//        collectionView?.register(FeedCell.self, forCellWithReuseIdentifier: cellID)
-        collectionView?.register(FeedCell.self, forCellWithReuseIdentifier: cellID)
+        // Register Feed ID
+        collectionView?.register(HomeFeed.self, forCellWithReuseIdentifier: homeFeedCellID)
+        collectionView?.register(TrendingFeed.self, forCellWithReuseIdentifier: trendingFeedCellID)
+        collectionView?.register(SubscriptionsFeed.self, forCellWithReuseIdentifier: subscriptionsFeedCellID)
         // Fix collectionView under menuBar
         collectionView?.contentInset = UIEdgeInsetsMake(50, 0, 0, 0)
         collectionView?.scrollIndicatorInsets = UIEdgeInsetsMake(50, 0, 0, 0)
@@ -150,9 +154,18 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        var cellID: String
+        switch indexPath.row {
+        case 0:
+            cellID = homeFeedCellID
+        case 1:
+            cellID = trendingFeedCellID
+        case 2:
+            cellID = subscriptionsFeedCellID
+        default:
+            cellID = homeFeedCellID
+        }
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellID, for: indexPath)
-//        let colors: [UIColor] = [.blue, .red, .green, .gray]
-//        cell.backgroundColor = colors[indexPath.row]
         return cell
     }
     

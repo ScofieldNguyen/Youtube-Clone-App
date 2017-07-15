@@ -10,10 +10,23 @@ import UIKit
 
 class ApiService: NSObject {
     static let sharedInstance = ApiService()
+    let baseURL = "https://s3-us-west-2.amazonaws.com/youtubeassets"
     
-    func fetchVideos(completion: @escaping ([Video]) -> ()) {
+    func fetchHomeVideos(completion: @escaping ([Video]) -> ()) {
+        fetchVideosFrom(urlString: baseURL + "/home.json", completion: completion)
+    }
+    
+    func fetchTrendingVideos(completion: @escaping ([Video]) -> ()) {
+        fetchVideosFrom(urlString: baseURL + "/trending.json", completion: completion)
+    }
+    
+    func fetchSubcriptionsVideos(completion: @escaping ([Video]) -> ()) {
+        fetchVideosFrom(urlString: baseURL + "/subscriptions.json", completion: completion)
+    }
+    
+    func fetchVideosFrom(urlString urlString: String, completion completion: @escaping ([Video]) -> ()) {
         
-        let url = URL(string: "https://s3-us-west-2.amazonaws.com/youtubeassets/home.json")
+        let url = URL(string: urlString)
         
         URLSession.shared.dataTask(with: url!) { (data, response, error) in
             
