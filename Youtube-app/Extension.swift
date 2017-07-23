@@ -21,6 +21,19 @@ extension UIView {
     }
 }
 
+extension Int64 {
+    var videoLenghtStringFormat: String {
+        get {
+            let seconds = self % 60
+            let minute = self / 60
+            
+            let minuteString = minute > 9 ? "\(minute)" : "0\(minute)"
+            let secondString = seconds > 9 ? "\(seconds)" : "0\(seconds)"
+            return "\(minuteString):\(secondString)"
+        }
+    }
+}
+
 extension UIColor {
     static func rgb(red: Float, green: Float, blue: Float) -> UIColor {
         return UIColor(colorLiteralRed: red/255, green: green/255, blue: blue/255, alpha: 1)
