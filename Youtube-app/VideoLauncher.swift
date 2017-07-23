@@ -35,12 +35,12 @@ class VideoPlayerView: UIView {
     }()
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        // Show controlViews on tapping
-//        UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: { 
-//            self.controlViews.isHidden = false
-//        }) { (completed) in
-//            // Do something here
-//        }
+        super.touchesBegan(touches, with: event)
+        UIView.animate(withDuration: 1, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
+            self.controlViews.isHidden = false
+        }) { (completed) in
+            // Do something here
+        }
     }
     
     lazy var pauseStartButton: UIButton = {
@@ -167,8 +167,6 @@ class VideoPlayerView: UIView {
         lengthSlider.rightAnchor.constraint(equalTo: timeLabel.leftAnchor).isActive = true
         lengthSlider.heightAnchor.constraint(equalToConstant: 24).isActive = true
         
-        // Hide controlViews by default
-        controlViews.isHidden = true
     }
     
     func addVideoPlayerAndPlayIt() {
@@ -216,6 +214,8 @@ class VideoPlayerView: UIView {
                     self.pauseStartButton.isHidden = false
                     let seconds = Int64(self.videoDuration)
                     self.timeLabel.text = seconds.videoLenghtStringFormat
+                    // Hide controlViews by default
+                    self.controlViews.isHidden = true
                 }
                 isPlaying = true
                 videoIsReady = true
@@ -232,20 +232,15 @@ class VideoLauncher: NSObject {
     func showVideoPlayer () {
         if let keyWindow = UIApplication.shared.keyWindow {
             // Init new view and add it to keyWindow
-            let view = UIView(frame: keyWindow.frame)
-            view.backgroundColor = UIColor.white
-            // Add subviews for new view
-            let height = view.frame.width * 9 / 16
-            let videoPlayerView = VideoPlayerView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: height))
-            view.addSubview(videoPlayerView)
+            let videoView = VideoView(frame: keyWindow.frame)
             // Add view to keyWindow
-            keyWindow.addSubview(view)
+            keyWindow.addSubview(videoView)
             // Animate view
             //   first animate frame
-            view.frame = CGRect(x: keyWindow.frame.width - 10, y: keyWindow.frame.height - 10, width: 10, height: 10)
+            videoView.frame = CGRect(x: keyWindow.frame.width - 10, y: keyWindow.frame.height - 10, width: 10, height: 10)
             //   last animate frame
             UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: { 
-                view.frame = keyWindow.frame
+                videoView.frame = keyWindow.frame
             }, completion: { (completed) in
                 // Hide statusbar when VideoLauncher is showed
                 UIApplication.shared.isStatusBarHidden = true
